@@ -28,6 +28,7 @@ namespace ListaEnlazadalimagenes
             return cabeza == null;
         }
 
+        // Agregar imagen al final de la lista
         public void AgregarImagen(string ruta)
         {
             NodoImagen nuevoNodo = new NodoImagen(ruta);
@@ -35,55 +36,63 @@ namespace ListaEnlazadalimagenes
             if (cabeza == null)
             {
                 cabeza = nuevoNodo;
-                cabeza.Siguiente = cabeza; // Circular
                 actual = cabeza;
                 indiceActual = 1;
             }
             else
             {
                 NodoImagen ultimo = cabeza;
-                while (ultimo.Siguiente != cabeza)
+
+                while (ultimo.Siguiente != null)
                 {
                     ultimo = ultimo.Siguiente;
                 }
+
                 ultimo.Siguiente = nuevoNodo;
-                nuevoNodo.Siguiente = cabeza;
             }
+
             total++;
         }
 
+        // Obtener imagen actual
         public Image ObtenerImagenActual()
         {
             if (actual != null)
             {
                 return actual.Imagen;
             }
+
             return null;
         }
 
+        // Avanzar al siguiente nodo sin circularidad
         public void ObtenerSiguienteImagen()
         {
-            if (actual != null)
+            if (actual != null && actual.Siguiente != null)
             {
                 actual = actual.Siguiente;
-                indiceActual = (indiceActual % total) + 1;
+                indiceActual++;
             }
         }
 
+        // Retroceder al nodo anterior sin circularidad
         public void ObtenerAnteriorImagen()
         {
-            if (actual != null && cabeza != null)
+            if (actual == null || actual == cabeza)
+                return;
+
+            NodoImagen temp = cabeza;
+
+            while (temp.Siguiente != actual)
             {
-                NodoImagen temp = cabeza;
-                while (temp.Siguiente != actual)
-                {
-                    temp = temp.Siguiente;
-                }
-                actual = temp;
-                indiceActual = (indiceActual - 2 + total) % total + 1;
+                temp = temp.Siguiente;
             }
+
+            actual = temp;
+            indiceActual--;
         }
 
+        // Regresar a la primera imagen
         public void Reiniciar()
         {
             if (cabeza != null)
@@ -93,63 +102,81 @@ namespace ListaEnlazadalimagenes
             }
             else
             {
+                actual = null;
                 indiceActual = 0;
             }
         }
 
+        // Eliminar imagen actual
         public void EliminarActual()
         {
-            if (cabeza == null) return;
+            if (cabeza == null || actual == null)
+                return;
 
-            if (cabeza.Siguiente == cabeza && total == 1)
+            NodoImagen eliminado = actual;
+
+            // Si el nodo actual es la cabeza
+            if (actual == cabeza)
             {
-                cabeza = null;
-                actual = null;
-                total = 0;
-                indiceActual = 0;
+                cabeza = cabeza.Siguiente;
+                actual = cabeza;
+
+                total--;
+
+                if (total > 0)
+                {
+                    indiceActual = 1;
+                }
+                else
+                {
+                    actual = null;
+                    indiceActual = 0;
+                }
+
                 return;
             }
 
+            // Buscar el nodo anterior al actual
             NodoImagen anterior = cabeza;
+
             while (anterior.Siguiente != actual)
             {
                 anterior = anterior.Siguiente;
             }
 
-            if (actual == cabeza)
+            // Si existe un nodo siguiente, pasa a él
+            if (actual.Siguiente != null)
             {
-                cabeza = cabeza.Siguiente;
-            }
-
-            anterior.Siguiente = actual.Siguiente;
-            actual = actual.Siguiente;
-            total--;
-
-            if (total > 0)
-            {
-                indiceActual = (indiceActual > total) ? 1 : indiceActual;
+                anterior.Siguiente = actual.Siguiente;
+                actual = actual.Siguiente;
             }
             else
             {
-                indiceActual = 0;
+                // Si se elimina el último, pasa al anterior
+                anterior.Siguiente = null;
+                actual = anterior;
+                indiceActual--;
             }
+
+            total--;
         }
 
+        // Obtener todas las rutas de la lista
         public string[] ObtenerTodasLasRutas()
         {
             List<string> listaRutas = new List<string>();
 
-            if (cabeza == null) return listaRutas.ToArray();
+            NodoImagen temp = cabeza;
 
-            NodoImagen nodoTemp = cabeza;
-            do
+            while (temp != null)
             {
-                if (nodoTemp != null && !string.IsNullOrEmpty(nodoTemp.RutaArchivo))
+                if (!string.IsNullOrEmpty(temp.RutaArchivo))
                 {
-                    listaRutas.Add(nodoTemp.RutaArchivo);
+                    listaRutas.Add(temp.RutaArchivo);
                 }
-                nodoTemp = nodoTemp.Siguiente;
-            } while (nodoTemp != null && nodoTemp != cabeza);
+
+                temp = temp.Siguiente;
+            }
 
             return listaRutas.ToArray();
         }

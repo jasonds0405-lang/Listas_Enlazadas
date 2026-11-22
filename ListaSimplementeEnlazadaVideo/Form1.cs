@@ -23,44 +23,10 @@ namespace ListaSimplementeEnlazadaVideo
         {
             galeriaCanales = new ListaSimpleEnlazadaCanales();
 
-            // ⚠️ IMPORTANTE: El control AxWindowsMediaPlayer funciona mejor con streams 
-            // directos (archivos MP4/WMV/M3U8 simples) o streams RTP. 
-            // Las URLs directas de YouTube o Twitch NO funcionarán aquí, ya que necesitan 
-            // un navegador o un reproductor más avanzado para interpretar el protocolo HLS.
-
-            // 💡 Ejemplos de streams públicos que puedes usar para pruebas (Generalmente son demos):
-
-            // 1. Big Buck Bunny (ya incluido en la respuesta anterior)
-            galeriaCanales.AgregarCanal("Big Buck Bunny (Demo)",
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4");
-
-            // 2. Tears of Steel
-            galeriaCanales.AgregarCanal("Tears of Steel (Demo)",
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4");
-
-            // 3. 🐘 Canal 4 (Elephants Dream) - NUEVO
-            galeriaCanales.AgregarCanal("Canal 4 (Elefantes)",
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4");
-
-            // 4. 🐉 Canal 5 (Sintel) - NUEVO
-            galeriaCanales.AgregarCanal("Canal 5 (Sintel)",
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4");
-
-            // 5. 💧 Canal 6 (Lluvia) - NUEVO
-            galeriaCanales.AgregarCanal("Canal 6 (Lluvia)",
-                "http://techslides.com/demos/sample-videos/small.mp4");
-
-            // --- Canales Ficticios (Para demostrar el concepto de un "Canal en Vivo") ---
-
-            // 6. 📰 Canal 7 (Noticias Ficticias) - NUEVO
-            // Nota: Estas URLs deben ser reemplazadas por un stream HLS/RTMP real si lo obtienes.
-            galeriaCanales.AgregarCanal("Canal 7 (Noticias Ficticias)",
-                "https://fake-news-stream.com/live/ch7.m3u8");
-
-            // 7. ⚽ Canal 8 (Deportes Ficticios) - NUEVO
-            galeriaCanales.AgregarCanal("Canal 8 (Deportes Ficticios)",
-                "https://sports-live-stream.com/hd/ch8.ts");
-
+            galeriaCanales.AgregarCanal("Video 1", System.IO.Path.Combine(Application.StartupPath, "videos", "Video1.mp4"));
+            galeriaCanales.AgregarCanal("Video 2", System.IO.Path.Combine(Application.StartupPath, "videos", "Video2.mp4"));
+            galeriaCanales.AgregarCanal("Video 3", System.IO.Path.Combine(Application.StartupPath, "videos", "Video3.mp4"));
+            galeriaCanales.AgregarCanal("Video 4", System.IO.Path.Combine(Application.StartupPath, "videos", "Video4.mp4"));
             // Iniciar con el primer canal
             ReproducirCanal(galeriaCanales.ObtenerCanalActual());
         }
